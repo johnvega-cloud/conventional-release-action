@@ -11,7 +11,7 @@ setup() {
   export TAG_PREFIX=v INITIAL_VERSION=0.0.0
   export GITHUB_OUTPUT="${WORK}/output" RUNNER_TEMP="${WORK}"
 
-  git init -q --bare "${WORK}/origin.git"
+  git init -q --bare -b main "${WORK}/origin.git"
   git init -q -b main "${WORK}/repo"
   cd "${WORK}/repo"
   git remote add origin "${WORK}/origin.git"
