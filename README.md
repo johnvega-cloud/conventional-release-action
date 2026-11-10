@@ -91,6 +91,26 @@ the token comes from the `GITHUB_TOKEN` environment variable. The same
 
 Step by step commands: [docs/BUILD_GUIDE.md](docs/BUILD_GUIDE.md).
 
+## Other platforms
+
+This repository targets GitHub Actions because the problem asks for a composite
+action. The logic itself is not tied to GitHub: [`release.sh`](release.sh) only
+needs Bash, Git and two environment variables (`TAG_PREFIX`, `INITIAL_VERSION`),
+so it runs unchanged on other CI systems. What has to be rewritten is the
+wrapper around it and the Terraform code:
+
+| | GitHub (this repository) | AWS | Azure |
+|---|---|---|---|
+| Runs the pipeline | GitHub Actions | CodeBuild / CodePipeline | Azure Pipelines |
+| Reusable wrapper | composite action (`action.yml`) | shared `buildspec.yml` | YAML pipeline template |
+| Terraform provider | `integrations/github` | `hashicorp/aws` | `microsoft/azuredevops` |
+| Permission to push the tag | `contents: write` on the job token | IAM role of the build project | build service identity on the repository |
+
+Those ports are not built or tested here. The more common setup is the one this
+repository already fits: the code and the pipeline stay on GitHub, and a later
+job deploys to AWS or Azure using the version this action produces (for example
+as the image tag instead of the commit SHA).
+
 ## Tests
 
 ```bash
