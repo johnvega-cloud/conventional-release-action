@@ -23,6 +23,12 @@ die() {
   exit 1
 }
 
+# A shallow clone (the checkout default) has no tags and one commit: the version
+# would be computed from the wrong starting point, so stop instead.
+if [[ "$(git rev-parse --is-shallow-repository)" == "true" ]]; then
+  die "the clone is shallow: use actions/checkout with fetch-depth: 0"
+fi
+
 # 1. Where are we? The last release tag reachable from HEAD, or the initial version.
 last_tag="$(git describe --tags --abbrev=0 --match "${TAG_PREFIX}[0-9]*" 2>/dev/null || true)"
 if [[ -n "$last_tag" ]]; then

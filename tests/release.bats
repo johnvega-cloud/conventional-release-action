@@ -104,6 +104,17 @@ output_has() {
   output_has "tag=release-2.0.1"
 }
 
+@test "a shallow clone fails instead of computing a wrong version" {
+  git tag v1.4.2
+  commit "fix: handle empty input"
+  git push -q origin main --tags
+  git clone -q --depth 1 "file://${WORK}/origin.git" "${WORK}/shallow"
+  cd "${WORK}/shallow"
+  run bash "${SCRIPT}"
+  [ "${status}" -eq 1 ]
+  [[ "${output}" == *"the clone is shallow"* ]]
+}
+
 @test "an initial version that is not semver fails" {
   export INITIAL_VERSION="1.0"
   commit "fix: handle empty input"
