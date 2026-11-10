@@ -1,5 +1,8 @@
 # conventional-release-action
 
+[![ci](https://github.com/johnvega-cloud/conventional-release-action/actions/workflows/ci.yml/badge.svg)](https://github.com/johnvega-cloud/conventional-release-action/actions/workflows/ci.yml)
+[![release](https://github.com/johnvega-cloud/conventional-release-action/actions/workflows/release.yml/badge.svg)](https://github.com/johnvega-cloud/conventional-release-action/actions/workflows/release.yml)
+
 A GitHub Actions composite action that reads conventional commits, works out
 the next semantic version, generates the changelog and pushes the Git tag.
 The repository and its settings are created with Terraform.
