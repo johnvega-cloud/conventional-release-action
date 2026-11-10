@@ -1,0 +1,8 @@
+.DS_Store
+
+# Terraform: local state and real values stay out of Git
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfvars
+!*.tfvars.example

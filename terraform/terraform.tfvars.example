@@ -1,0 +1,10 @@
+# Copy to terraform.tfvars and edit. terraform.tfvars is not committed.
+github_owner           = "your-user-or-org"
+repository_name        = "conventional-release-action"
+repository_description = "Composite GitHub Action: semantic versioning, changelog and Git tags from conventional commits"
+repository_topics      = ["github-actions", "semantic-versioning", "conventional-commits"]
+
+# Optional (these are the defaults):
+# repository_visibility = "public"
+# tag_prefix            = "v"
+# initial_version       = "0.0.0"

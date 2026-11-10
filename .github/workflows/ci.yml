@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Lint the script
+        run: shellcheck release.sh
+
+      - name: Test the script
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq bats
+          bats tests/
+
+      - uses: hashicorp/setup-terraform@v3
+
+      - name: Validate Terraform
+        working-directory: terraform
+        run: |
+          terraform fmt -check
+          terraform init -backend=false -input=false
+          terraform validate

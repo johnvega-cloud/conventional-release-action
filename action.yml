@@ -1,0 +1,45 @@
+name: Conventional release
+description: >-
+  Semantic versioning, changelog generation and automated Git tagging based on
+  conventional commits.
+
+inputs:
+  tag-prefix:
+    description: Text before the version in a tag (v -> v1.2.3).
+    default: v
+  initial-version:
+    description: Version to start from when the repository has no release tag yet.
+    default: 0.0.0
+  git-user-name:
+    description: Name recorded as the tagger.
+    default: github-actions[bot]
+  git-user-email:
+    description: Email recorded as the tagger.
+    default: 41898282+github-actions[bot]@users.noreply.github.com
+
+outputs:
+  released:
+    description: "'true' if a new tag was created, 'false' if there was nothing to release."
+    value: ${{ steps.release.outputs.released }}
+  version:
+    description: The new version without the prefix (1.2.3).
+    value: ${{ steps.release.outputs.version }}
+  tag:
+    description: The new tag (v1.2.3).
+    value: ${{ steps.release.outputs.tag }}
+  changelog-file:
+    description: Path of a Markdown file with the changelog of the new version.
+    value: ${{ steps.release.outputs.changelog-file }}
+
+runs:
+  using: composite
+  steps:
+    - id: release
+      shell: bash
+      # Inputs go through env, never straight into the script text (no injection).
+      env:
+        TAG_PREFIX: ${{ inputs.tag-prefix }}
+        INITIAL_VERSION: ${{ inputs.initial-version }}
+        GIT_COMMITTER_NAME: ${{ inputs.git-user-name }}
+        GIT_COMMITTER_EMAIL: ${{ inputs.git-user-email }}
+      run: bash "${GITHUB_ACTION_PATH}/release.sh"
